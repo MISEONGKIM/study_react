@@ -31,4 +31,24 @@ JSX 내부에 {this.state.stateName}
 값을 수정 할 때에는 this.setState({..}), 렌더링 된 다음에 this.state= 절대 사용하지 말것
 
 --컴포넌트 매핑 
-arr.map(콜백함수,..~) 파라미터로 전달 된 함수를 통하여 배열 내의 각 요서를 처리해서 그 결과로 새로운 배열을 생성
+arr.map(콜백함수,..~) 파라미터로 전달 된 함수를 통하여 배열 내의 각 요소를 처리해서 그 결과로 새로운 배열을 생성
+
+--sort()
+유니코드로 비교함 
+숫자비교시 콜백함수 집어넣어줘야함 
+기존배열 바꿈
+
+function comparenumbers(a,b) {
+  return a-b;
+} //오름차순 
+
+function comparenumbers(a,b) {
+  return (a-b) * -1;
+} // 내림차순
+scores.sort(comparenumbers);
+
+
+--filter() 
+파라미터로 넘어온 함수에 만족되는 값만 정해서 새로운 배열 만듬
+
+

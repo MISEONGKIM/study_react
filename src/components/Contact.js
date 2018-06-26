@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import ContactInfo from "./ContactInfo";
+import ContactDetails from "./ContactDetails";
+import update from "react-addons-update"; //immutability Helper
+import ContactCreate from "./ContactCreate";
 
 export default class Contact extends Component {
   constructor(props) {
@@ -31,6 +34,29 @@ export default class Contact extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
+
+    this.handleCreate = this.handleCreate.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+  }
+  componentWillMount() {
+    //컴포넌트 렌더링 되기 전에 contactData가 저장되어 있는지 보고 되어 있다면 그거 사용
+    const contactData = localStorage.contactData;
+    if (contactData) {
+      this.setState({
+        contactData: JSON.parse(contactData)
+      });
+    }
+  }
+
+  componentDidUpdate(preProps, prevState) {
+    if (
+      JSON.stringify(prevState.contactData) !==
+      JSON.stringify(this.state.contactData)
+    ) {
+      localStorage.contactData = JSON.stringify(this.state.contactData); //바꼈으면 loacalStorage에 저장
+    }
   }
   //handleChange는 this가 뭔지 모름 그러므로 위처럼 bind 해줘야함
   handleChange(e) {
@@ -48,6 +74,37 @@ export default class Contact extends Component {
     console.log(key, "is selected");
   }
 
+  handleCreate(contact) {
+    this.setState({
+      contactData: update(this.state.contactData, {
+        $push: [contact]
+      })
+    });
+  }
+
+  handleRemove() {
+    if (this.state.selectedKey < 0) {
+      return;
+    }
+    this.setState({
+      contactData: update(this.state.contactData, {
+        $splice: [[this.state.selectedKey, 1]] //배열의 배열로 전달해줘야함
+      }),
+      selectedKey: -1
+    });
+  }
+
+  handleEdit(name, phone) {
+    this.setState({
+      contactData: update(this.state.contactData, {
+        [this.state.selectedKey]: {
+          name: { $set: name },
+          phone: { $set: phone }
+        }
+      })
+    });
+  }
+
   render() {
     const mapToComponents = data => {
       data.sort(); //오름차순 정렬하기 때문에 파라미터 생략가능
@@ -62,7 +119,7 @@ export default class Contact extends Component {
             key={i}
             //onClick props로 전달된다. 그래서 contactinfo에서 전달 받음
             onClick={() => {
-              console.log("A");
+              this.handleClick(i);
             }}
           />
         );
@@ -79,6 +136,13 @@ export default class Contact extends Component {
           onChange={this.handleChange}
         />
         <div>{mapToComponents(this.state.contactData)}</div>
+        <ContactDetails
+          isSelected={this.state.selectedKey !== -1}
+          contact={this.state.contactData[this.state.selectedKey]}
+          onRemove={this.handleRemove}
+          onEdit={this.handleEdit}
+        />
+        <ContactCreate onCreate={this.handleCreate} />
       </div>
     );
   }

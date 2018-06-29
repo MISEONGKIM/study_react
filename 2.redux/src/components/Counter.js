@@ -16,5 +16,5 @@ export default class Counter extends Component {
     );
   }
 }
-Counter.prototype = {};
+Counter.PropTypes = {};
 Counter.defaultProps = {};

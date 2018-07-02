@@ -1,12 +1,9 @@
 import React, { Component } from "react";
-import PropsTypes from "prop-types";
 import Value from "./Value";
 import Control from "./Control";
+import { connect } from "react-redux";
 
 export default class Counter extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <div>
@@ -16,5 +13,5 @@ export default class Counter extends Component {
     );
   }
 }
-Counter.PropTypes = {};
-Counter.defaultProps = {};
+
+//const map statetopops 부터

@@ -92,7 +92,7 @@ contactDetails.defaultProps = {
   }
 };
 
-contactDetails.propTypes = {
+contactDetails.PropTypes = {
   contact: PropTypes.object,
   onRemove: PropTypes.func,
   onEdit: PropTypes.func

@@ -213,4 +213,20 @@ store 하는일 : 1. dispatch(action) 액션을 리듀서로 보낸다.
 뷰 레이어 바인딩도구 리액트에서 리덕스 사용할 때 복잡한 작업 얘가 다해줌 
 Provider : 하나의 컴포넌트 컴포넌트에서 리덕스를 사용하도록 서비스 제공해줌
 connect([...options]) : 전달받은 옵션을 사용해서 컴포넌트를 리덕스에 연결하는 또 다른!!! 함수를 반환합니다.
-connect()(Counter) :반환된 함수의 인자로 counter전달해주면 counter가 리덕스에 연결되서 이 함수의 반환값으로 store에 연결 된 새로운 컴포넌트 클래스가 반환됨 옵션이 없으면 this.props.store로 접근 가능
+connect()(Counter) :반환된 함수의 인자로 counter전달해주면 counter가 리덕스에demo 연결되서 이 함수의 반환값으로 store에 연결 된 새로운 컴포넌트 클래스가 반환됨 옵션이 없으면 this.props.store로 접근 가능
+
+
+------------------------ react router v4 pre-release
+npm install --save react-router@next -> 뒤에 @next안하면  v2 모듈 설치함
+ReactDOM.render(<Router history = {browserHistory}> //browserHistoy 를 사용함으로서, 뒤로가기를 해도 페이지가 새로 리로딩되지 않고 필요한부분만 리렌더링하게끔 해줌.
+      <Route path = "/" component = {App}> //Route 는 클라이언트상에서 페이지를 라우팅 할 주소를 정의해줌.
+         <IndexRoute component = {Home} /> //IndexRoute 의 Index 가 의미하듯, 라우터의 첫 페이지를 정의줌.
+         <Route path = "home" component = {Home} />
+         <Route path = "about" component = {About} />
+         <Route path = "articles" component = {Articles} />
+      </Route>
+   </Router>, document.getElementById('root'));
+지금까지 ReactDOM 을 사용해 컴포넌트를 렌더링 할 때, 바로 <App…. /> 형태로 해왔지만 라우터를 사용할 땐 <Router …> 형태를 사용. 
+여기선 App 컴포넌트가 Router의 props로 있는 셈.
+
+

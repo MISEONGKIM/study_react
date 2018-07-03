@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 export default class Value extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <div>
@@ -14,7 +11,7 @@ export default class Value extends Component {
   }
 }
 
-Value.PropTypes = {
+Value.propTypes = {
   number: PropTypes.number
 };
 

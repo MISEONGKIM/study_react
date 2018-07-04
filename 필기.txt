@@ -228,5 +228,7 @@ ReactDOM.render(<Router history = {browserHistory}> //browserHistoy 를 사용�
    </Router>, document.getElementById('root'));
 지금까지 ReactDOM 을 사용해 컴포넌트를 렌더링 할 때, 바로 <App…. /> 형태로 해왔지만 라우터를 사용할 땐 <Router …> 형태를 사용. 
 여기선 App 컴포넌트가 Router의 props로 있는 셈.
-
-
+index 페이지로 이동시 exact 잊으면안됨 
+<Link to = {`${match.path}/rendering`}>Rendering </Link> //a태그같은거
+<Route path = {`${match.path}/:파라미터이름`} component={컴포넌트} /> //서브라우터
+위에 Link 클릭하면 match의 파라미터 이름으로 rendering이 들어가게 됨 

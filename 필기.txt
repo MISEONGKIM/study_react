@@ -5,6 +5,19 @@ react.min.js 파일안에는 컴포넌트 담당 react-dom-min.js 파일안에�
 자바스크립트 class 안에서는 메소드만 만들 수 있다.
 static 메소드는 객체생성전에도 사용가능
 
+-----------------함수형 컴포넌트
+state 가 없고, life cycle 메소드가 필요없는 멍청한 컴포넌트라면, 함수형 컴포넌트로 선언을 하는것이 좋은 패턴
+보기에도 깔끔하고, 컴포넌트의 로직을 컴포넌트 바깥으로 옮기므로, 나중에 테스팅하기에도 편함
+함수형 컴포넌트는 this 에 접근하는것이 불가능하며, lifeCycle api 들을 사용하는것이 불가능
+함수형 컴포넌트는 오직 전달받는 props 에만 의존
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+ES6 의 destructure 기능을 사용하면 다음과 같이 선언
+function Welcome({ name }) {
+  return <h1>Hello, {name}</h1>;
+}
+
 -----------------JSX
 컨테이너 element로 꼭 감싸줘야함
 JSX안에서 자바스크립트 표현시에는 {}로 표현
@@ -138,7 +151,7 @@ App.propTypes = {
 }
 
 -----------------LifeCycle API
-1.componentWillMount -> 렌더링 되기 전 , 여기서 돔 처리 할 수 없음
+1.componentWillMount -> 렌더링 되기 전 , 여기서 돔 처리 할 수 없음 //사라질 것
 2.componentDidMount -> 렌더링된 다음, 돔 처리 가능
 3.componentWillReceiveProps -> 새로운 props 받았을 때 ,setState 사용 가능
 4.shouldComponentUpdate -> props/state가 변경되었을 때 리렌더링을 할지말지 정한다. 실제 사용 시 비교하고 값 반환 해야함
@@ -168,10 +181,10 @@ store는 단 하나만 존재, reducer은 한개 또는 여러개 존재가능
 
 ---------뷰:똑똑한 컴포넌트, 멍청한 컴포넌트
 Contact 컴포넌트에 비유하면 Contact컴포넌트는 똑똑한, ContactCreate/ContactDetails는 멍청한 컴포넌트이다.
-똑똑한 -> 액션처리 책임, 자신의 스타일,dom 가지지 않음 
-멍청한 -> 액션에 의존성 가지지 않고 props 통해서 액션 전달받아서 사용함, 똑똑한 컴포넌트 대신 자신의 스타일,dom 가짐
+똑똑한(containers 디렉토리) -> 액션처리,redux 연동(connect()), 자신의 스타일,dom 가지지 않음  
+멍청한(components 디렉토리) -> 액션에 의존성 가지지 않고 props 통해서 액션 전달받아서 사용함, 똑똑한 컴포넌트 대신 자신의 스타일,dom 가짐
 뷰 레이어 바인딩 : store를 view에 연동시킬 때 뷰 레이어 바인딩 필요(없어도 되지만 사용하면 편리), 리액트에서 리덕스 사용 시 좀 더 쉽게 컴포넌트 스토어에 연결시켜줌
-루트 컴포넌트: 리듀스의 기본적인 설정을 담당 그 외 할일 없음 그닥 
+루트 컴포넌트: 리듀스의 기본적인 설정(스토어를 생성하고 무슨 리듀서를 사용할지 알려주며 뷰 레이어 바인딩과 뷰를 불러온다.)을 담당 그 외 할일 없음 그닥 
 http://bestalign.github.io/2015/10/26/cartoon-intro-to-redux/ -> 참고
 
 npm install --save redux react-redux -> react-redux가 뷰 레이어 바인딩임
@@ -205,7 +218,7 @@ Counter 프로젝트에서의 액션은
 -----------------store
 store는 어필리케이션의 현재상태를 지니고있음
 스토어 만들기 : 리덕스에서 createStore(리듀서)
-store 하는일 : 1. dispatch(action) 액션을 리듀서로 보낸다. 
+store 하는일 : 1. dispatch(action) 액션을 스토어가 받고 스토어가 상태랑 액션을 리듀서로 보낸다. 
               2. getState() 현재상태반환
               3. subscribe(listener) 상태가 바뀔때마다 실행할 함수 등록 listener가 콜백함수
 
@@ -232,3 +245,53 @@ index 페이지로 이동시 exact 잊으면안됨
 <Link to = {`${match.path}/rendering`}>Rendering </Link> //a태그같은거
 <Route path = {`${match.path}/:파라미터이름`} component={컴포넌트} /> //서브라우터
 위에 Link 클릭하면 match의 파라미터 이름으로 rendering이 들어가게 됨 
+
+------------------------ axois
+React.js 는 효율적인 UI 구현을 위한 라이브러리.
+HTTP Client 를 내장하고있는 Angular 와는 다르게, React.js 는 따로 내장 클래스가 존재하지 않음
+따라서 React.js 어플리케이션에서 AJAX 를 구현하려면 JavaScript 내장객체인 XMLRequest 를 사용하거나, 
+다른 HTTP Client 라이브러리와 함께 사용, 따로 HTTP Client 를 받을 필요 없이 jQuery 를 사용해도 됨 
+하지만, HTTP Client 만을 위해서 jQuery 기능을 사용하는건 좀 낭비-> 필요없는 기능들이 많음 (물론 그 부분만 따로 추출해서 사용 가능)
+자바스크립트 라이브러리중, 오직 AJAX 기능만을 위하여 만들어진 라이브러리들( axios, fetch, superagent, request 등)
+
+axios 를 사용하는 주요 이유:
+  Promise 기반
+  클라이언트 / 서버에서 동일하게 작동함
+  다양한 브라우저 지원
+  편리함
+
+------------------------ Semantic-UI (css 프레임워크)
+Semantic-UI 를 그대로 가져다가 써도 되지만, 기존 CSS 프레임워크는 드롭다운, 사이드바 등에서 jQuery 를 사용
+semantic-ui-react 모듈 사용 -> Semantic-UI 의 엘리먼트들이 모두 React 컴포넌트들로 구성되어있고, jQuery 를 사용하지 않음
+
+------------------------코드 스플리팅(Code Splitting)
+싱글페이지 어플리케이션의 단점은 자바스크립트 번들 파일에 어플리케이션에 대한 모든 로직을 불러와서, 규모가 커지면 용량이 커지기 때문에, 로딩속도가 지연됨
+코드 스플리팅은 필요에 따라 번들 파일을 여러개의 파일로 분리 시킴
+코드 스플리팅의 원리 -> 한개의 파일에서 처음부터 모든걸 불러오는게 아니라, 우리가 설정하는 대로, 라이브러리나 컴포넌트가 실제로 필요해질 때, 나중에 불러오는 것
+애초에, 개발서버를 위한 웹팩 설정에서는 코드 스플리팅을 할 필요가 없음 프로덕션에서만 코드스플리팅을 하도록 설정할 것
+Vendor 설정 -> 프로젝트에서 전역적으로 사용되는 라이브러리들을 분리 이를 Vendor파일이라고 함 (react, react-dom 이러한 프로젝트 전체에 필요한 라이브러리들 넣어주면 됨)
+청크(chunk) -> 코드를 비동기적으로 불러오면, 웹팩에서 처리를 하면서 코드를 분리시키는데요, 이를 청크(chunk) 라고 부름
+
+------------------------HOC(Higher-order Component)
+반복되는 코드를 없애기 위해서 사용
+HOC는 하나의 함수, 함수를 통하여 컴포넌트에 우리가 준비한 특정 기능을 부여
+주로 HOC 의 이름을 만들땐 with_____ 형식 ->  웹요청을 하는 HOC를 만든다면 withRequest
+HOC 의 원리는, 파라미터로 컴포넌트를 받아오고, 함수 내부에서 새 컴포넌트를 만든 다음에 해당 컴포넌트 안에서 파라미터로 받아온 컴포넌트를 렌더링하는 것
+               그리고 자신이 받아온 props 들은 그대로 파라미터로 받아온 컴포넌트에게 다시 주입해주고, 필요에 따라 추가 props 도 넣어줌(예를들어 우리의 경우엔 웹요청 결과물)
+import React, { Component } from 'react';
+
+const withRequest = (url) => (WrappedComponent) => {
+  return class extends Component {
+    render() {
+      return (
+        <WrappedComponent {...this.props}/>
+      )
+    }
+  }
+}
+export default withRequest;
+//함수에서 또 다른 함수를 리턴함 -> (url, WrappedComponent) 형식이 아니라, (url) => (WrappedComponent) 로 한 이유는, 나중에 여러개의 HOC 를 합쳐서 사용하게 될 때 더욱 편하게 사용하기 위함
+
+HOC 다 만들었으면 사용하기: 
+  Comments.js에서
+  export default withRequest('https://jsonplaceholder.typicode.com/comments?postId=1')(Comments);

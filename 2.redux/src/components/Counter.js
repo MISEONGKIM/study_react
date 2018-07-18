@@ -39,7 +39,7 @@ class Counter extends Component {
     );
   }
 }
-
+//store 의 state 를 컴포넌트의 props 에 매핑
 const mapStateToProps = state => {
   //그냥 파라미터 이름이 state인 것
   return {
@@ -47,7 +47,7 @@ const mapStateToProps = state => {
     color: state.ui.color
   };
 };
-
+//컴포넌트의 특정 함수형 props 를 실행 했을 때, 개발자가 지정한 action을 dispatch 하도록 설정
 const mapDispatchToProps = dispatch => {
   return {
     handleIncrement: () => {
